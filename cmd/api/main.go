@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"go-todoapp/internal/server"
+	"github.com/maeshinshin/go-multiapi/internal/server"
 )
 
 func gracefulShutdown(apiServer *http.Server, done chan bool) {

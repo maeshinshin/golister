@@ -1,4 +1,4 @@
-# Project go-todoapp
+# Project go-multiapi
 
 One Paragraph of project description goes here
 

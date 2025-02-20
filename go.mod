@@ -1,4 +1,4 @@
-module go-todoapp
+module github.com/maeshinshin/go-multiapi
 
 go 1.24.0
 

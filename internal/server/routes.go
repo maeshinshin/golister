@@ -6,7 +6,8 @@ import (
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"go-todoapp/cmd/web"
+
+	"github.com/maeshinshin/go-multiapi/cmd/web"
 )
 
 func (s *Server) RegisterRoutes() http.Handler {

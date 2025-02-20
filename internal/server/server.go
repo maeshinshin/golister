@@ -9,7 +9,7 @@ import (
 
 	_ "github.com/joho/godotenv/autoload"
 
-	"go-todoapp/internal/database"
+	"github.com/maeshinshin/go-multiapi/internal/database"
 )
 
 type Server struct {
