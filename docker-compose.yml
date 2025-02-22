@@ -15,6 +15,7 @@ services:
       DB_DATABASE: ${DB_DATABASE}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
+      OPENWEATHER_API_KEY: ${OPENWEATHER_API_KEY}
     depends_on:
       mysql_bp:
         condition: service_healthy
