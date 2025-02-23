@@ -59,9 +59,6 @@ func TestFetchWeatherData(t *testing.T) {
 					defer func() {
 						os.Setenv("OPENWEATHER_API_KEY", apiKey)
 					}()
-					// defer func(apiKey string) {
-					// 	os.Setenv("OPENWEATHER_API_KEY", apiKey)
-					// }(apiKey)
 				}
 				if tt.constraint.failtoFetching {
 					var tmp string

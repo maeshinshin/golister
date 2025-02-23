@@ -1,4 +1,4 @@
-package server
+package router
 
 import (
 	"encoding/json"
@@ -15,9 +15,9 @@ func TestHandler(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	resp := httptest.NewRecorder()
 	c := e.NewContext(req, resp)
-	s := &Server{}
+	r := &Router{}
 	// Assertions
-	if err := s.HelloWorldHandler(c); err != nil {
+	if err := r.HelloWorldHandler(c); err != nil {
 		t.Errorf("handler() error = %v", err)
 		return
 	}
