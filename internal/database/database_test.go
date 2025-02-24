@@ -10,17 +10,11 @@ import (
 
 func TestMain(m *testing.M) {
 
-	var (
-		dbName = "database"
-		dbPwd  = "password"
-		dbUser = "user"
-	)
+	dbname = "database"
+	username = "user"
+	password = "password"
 
-	dbname = dbName
-	password = dbPwd
-	username = dbUser
-
-	teardown, containerData, err := testutil.MustStartMySQLContainer(dbname, password, dbUser)
+	teardown, containerData, err := testutil.MustStartMySQLContainer(dbname, username, password)
 
 	if err != nil {
 		log.Fatalf("could not start mysql container: %v", err)

@@ -22,7 +22,7 @@ func (c *ContainerData) Port() string {
 	return c.port
 }
 
-func MustStartMySQLContainer(dbName, dbPwd, dbUser string) (func(context.Context, ...testcontainers.TerminateOption) error, *ContainerData, error) {
+func MustStartMySQLContainer(dbName, dbUser, dbPwd string) (func(context.Context, ...testcontainers.TerminateOption) error, *ContainerData, error) {
 
 	dbContainer, err := mysql.Run(context.Background(),
 		"mysql:8.0.36",
