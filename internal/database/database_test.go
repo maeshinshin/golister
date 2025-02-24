@@ -4,56 +4,34 @@ import (
 	"context"
 	"log"
 	"testing"
-	"time"
 
-	"github.com/testcontainers/testcontainers-go"
-	"github.com/testcontainers/testcontainers-go/modules/mysql"
-	"github.com/testcontainers/testcontainers-go/wait"
+	"github.com/maeshinshin/go-multiapi/internal/testutil"
 )
 
-func mustStartMySQLContainer() (func(context.Context, ...testcontainers.TerminateOption) error, error) {
+func TestMain(m *testing.M) {
+
 	var (
 		dbName = "database"
 		dbPwd  = "password"
 		dbUser = "user"
 	)
 
-	dbContainer, err := mysql.Run(context.Background(),
-		"mysql:8.0.36",
-		mysql.WithDatabase(dbName),
-		mysql.WithUsername(dbUser),
-		mysql.WithPassword(dbPwd),
-		testcontainers.WithWaitStrategy(wait.ForLog("port: 3306  MySQL Community Server - GPL").WithStartupTimeout(30*time.Second)),
-	)
-	if err != nil {
-		return nil, err
-	}
-
 	dbname = dbName
 	password = dbPwd
 	username = dbUser
 
-	dbHost, err := dbContainer.Host(context.Background())
-	if err != nil {
-		return dbContainer.Terminate, err
-	}
+	teardown, containerData, err := testutil.MustStartMySQLContainer(dbname, password, dbUser)
 
-	dbPort, err := dbContainer.MappedPort(context.Background(), "3306/tcp")
-	if err != nil {
-		return dbContainer.Terminate, err
-	}
-
-	host = dbHost
-	port = dbPort.Port()
-
-	return dbContainer.Terminate, err
-}
-
-func TestMain(m *testing.M) {
-	teardown, err := mustStartMySQLContainer()
 	if err != nil {
 		log.Fatalf("could not start mysql container: %v", err)
 	}
+
+	if containerData == nil {
+		log.Fatalf("could not get mysql container Data: %v", err)
+	}
+
+	host = containerData.Host()
+	port = containerData.Port()
 
 	m.Run()
 
