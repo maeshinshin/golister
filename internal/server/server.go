@@ -10,7 +10,7 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 
 	"github.com/maeshinshin/go-multiapi/internal/database"
-	"github.com/maeshinshin/go-multiapi/internal/router"
+	"github.com/maeshinshin/go-multiapi/router"
 )
 
 func NewServer() *http.Server {
