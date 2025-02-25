@@ -1,0 +1,7 @@
+linters:
+  enable-all: true
+  disable: []
+
+issues:
+  exclude-files:
+    - cmd/web/.*\\.go$
