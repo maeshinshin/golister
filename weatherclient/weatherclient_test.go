@@ -56,14 +56,17 @@ func TestFetchWeatherData(t *testing.T) {
 				if tt.constraint.noApiKey {
 					apiKey := os.Getenv("OPENWEATHER_API_KEY")
 					os.Setenv("OPENWEATHER_API_KEY", "")
+
 					defer func() {
 						os.Setenv("OPENWEATHER_API_KEY", apiKey)
 					}()
 				}
 				if tt.constraint.failtoFetching {
 					var tmp string
+
 					apiKey := os.Getenv("OPENWEATHER_API_KEY")
 					os.Setenv("OPENWEATHER_API_KEY", "testapi")
+
 					apiURL, tmp = "https://gotest.maesh.dev?q=%s&appid=%s", apiURL
 					defer func() {
 						apiURL = tmp
