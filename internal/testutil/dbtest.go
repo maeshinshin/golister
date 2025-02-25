@@ -2,6 +2,7 @@ package testutil
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/testcontainers/testcontainers-go"
@@ -45,6 +46,7 @@ func MustStartMySQLContainer(dbName, dbUser, dbPwd string) (func(context.Context
 	if err != nil {
 		return dbContainer.Terminate, nil, err
 	}
+	fmt.Println(&ContainerData{dbHost, dbPort.Port()})
 
 	return dbContainer.Terminate, &ContainerData{dbHost, dbPort.Port()}, err
 }

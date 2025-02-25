@@ -8,15 +8,16 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/maeshinshin/go-multiapi/cmd/web"
+	"github.com/maeshinshin/go-multiapi/handlers"
 	"github.com/maeshinshin/go-multiapi/internal/database"
 )
 
 type Router struct {
-	db database.Service
+	handlers *handlers.Handlers
 }
 
 func NewRouter(db database.Service) *Router {
-	return &Router{db}
+	return &Router{handlers.NewHandlers(db)}
 }
 
 func (r *Router) RegisterRoutes() http.Handler {
@@ -38,21 +39,9 @@ func (r *Router) RegisterRoutes() http.Handler {
 	e.GET("/web", echo.WrapHandler(templ.Handler(web.HelloForm())))
 	e.POST("/hello", echo.WrapHandler(http.HandlerFunc(web.HelloWebHandler)))
 
-	e.GET("/", r.HelloWorldHandler)
+	e.GET("/", r.handlers.HelloWorldHandler)
 
-	e.GET("/health", r.healthHandler)
+	e.GET("/health", r.handlers.HealthHandler)
 
 	return e
-}
-
-func (r *Router) HelloWorldHandler(c echo.Context) error {
-	resp := map[string]string{
-		"message": "Hello World",
-	}
-
-	return c.JSON(http.StatusOK, resp)
-}
-
-func (r *Router) healthHandler(c echo.Context) error {
-	return c.JSON(http.StatusOK, r.db.Health())
 }
