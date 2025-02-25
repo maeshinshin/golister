@@ -11,6 +11,8 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/joho/godotenv/autoload"
+
+	"github.com/maeshinshin/go-multiapi/internal/util"
 )
 
 // Service represents a service that interacts with a database.
@@ -28,12 +30,15 @@ type service struct {
 	db *sql.DB
 }
 
+var DbInfo *util.DBInfo = &util.DBInfo{
+	DB_DATABASE: os.Getenv("DB_DATABASE"),
+	DB_USERNAME: os.Getenv("DB_USERNAME"),
+	DB_PASSWORD: os.Getenv("DB_PASSWORD"),
+	Db_PORT:     os.Getenv("DB_PORT"),
+	Db_HOST:     os.Getenv("DB_HOST"),
+}
+
 var (
-	dbname     = os.Getenv("DB_DATABASE")
-	password   = os.Getenv("DB_PASSWORD")
-	username   = os.Getenv("DB_USERNAME")
-	port       = os.Getenv("DB_PORT")
-	host       = os.Getenv("DB_HOST")
 	dbInstance *service
 )
 
@@ -44,7 +49,7 @@ func New() Service {
 	}
 
 	// Opening a driver typically will not attempt to connect to the database.
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, host, port, dbname))
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", DbInfo.DB_USERNAME, DbInfo.DB_PASSWORD, DbInfo.Db_HOST, DbInfo.Db_PORT, DbInfo.DB_DATABASE))
 	if err != nil {
 		// This will not be a connection error, but a DSN parse error or
 		// another initialization error.
@@ -115,6 +120,6 @@ func (s *service) Health() map[string]string {
 // If the connection is successfully closed, it returns nil.
 // If an error occurs while closing the connection, it returns the error.
 func (s *service) Close() error {
-	log.Printf("Disconnected from database: %s", dbname)
+	log.Printf("Disconnected from database: %s", DbInfo.DB_DATABASE)
 	return s.db.Close()
 }

@@ -5,27 +5,24 @@ import (
 	"log"
 	"testing"
 
-	"github.com/maeshinshin/go-multiapi/internal/testutil"
+	"github.com/maeshinshin/go-multiapi/internal/util"
 )
 
 func TestMain(m *testing.M) {
 
-	dbname = "database"
-	username = "user"
-	password = "password"
+	DbInfo.DB_DATABASE = "database"
+	DbInfo.DB_USERNAME = "user"
+	DbInfo.DB_PASSWORD = "password"
 
-	teardown, containerData, err := testutil.MustStartMySQLContainer(dbname, username, password)
+	teardown, err := util.MustStartMySQLContainer(DbInfo)
 
 	if err != nil {
 		log.Fatalf("could not start mysql container: %v", err)
 	}
 
-	if containerData == nil {
-		log.Fatalf("could not get mysql container Data: %v", err)
+	if DbInfo.Db_HOST == "" || DbInfo.Db_PORT == "" {
+		log.Fatalf("could not get mysql container Data: %v", DbInfo)
 	}
-
-	host = containerData.Host()
-	port = containerData.Port()
 
 	m.Run()
 

@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -14,56 +13,24 @@ import (
 	"github.com/labstack/echo/v4"
 
 	"github.com/maeshinshin/go-multiapi/internal/database"
-	"github.com/maeshinshin/go-multiapi/internal/testutil"
+	"github.com/maeshinshin/go-multiapi/internal/util"
 )
-
-type dbInfo struct {
-	dB_DATABASE string
-	dB_PASSWORD string
-	dB_USERNAME string
-	dB_HOST     string
-	dB_PORT     string
-}
 
 func TestMain(m *testing.M) {
 
-	testDBData := &dbInfo{
-		dB_DATABASE: "database",
-		dB_PASSWORD: "password",
-		dB_USERNAME: "user",
-	}
+	database.DbInfo.DB_DATABASE = "database"
+	database.DbInfo.DB_PASSWORD = "password"
+	database.DbInfo.DB_USERNAME = "user"
 
-	teardown, containerData, err := testutil.MustStartMySQLContainer(testDBData.dB_DATABASE, testDBData.dB_USERNAME, testDBData.dB_PASSWORD)
+	teardown, err := util.MustStartMySQLContainer(database.DbInfo)
 
 	if err != nil {
 		log.Fatalf("could not start mysql container: %v", err)
 	}
 
-	if containerData == nil {
-		log.Fatalf("could not get mysql container Data: %v", err)
+	if database.DbInfo.Db_HOST == "" || database.DbInfo.Db_PORT == "" {
+		log.Fatalf("could not get mysql container Data: %v", database.DbInfo)
 	}
-
-	tmpDBData := &dbInfo{
-		dB_DATABASE: os.Getenv("DB_DATABASE"),
-		dB_PASSWORD: os.Getenv("DB_PASSWORD"),
-		dB_USERNAME: os.Getenv("DB_USERNAME"),
-		dB_HOST:     os.Getenv("DB_PORT"),
-		dB_PORT:     os.Getenv("DB_HOST"),
-	}
-
-	os.Setenv("DB_DATABASE", testDBData.dB_DATABASE)
-	os.Setenv("DB_PASSWORD", testDBData.dB_PASSWORD)
-	os.Setenv("DB_USERNAME", testDBData.dB_USERNAME)
-	os.Setenv("DB_PORT", containerData.Port())
-	os.Setenv("DB_HOST", containerData.Host())
-
-	defer func() {
-		os.Setenv("DB_DATABASE", tmpDBData.dB_DATABASE)
-		os.Setenv("DB_PASSWORD", tmpDBData.dB_PASSWORD)
-		os.Setenv("DB_USERNAME", tmpDBData.dB_USERNAME)
-		os.Setenv("DB_PORT", tmpDBData.dB_PORT)
-		os.Setenv("DB_HOST", tmpDBData.dB_HOST)
-	}()
 
 	m.Run()
 
