@@ -40,6 +40,7 @@ func MustStartMySQLContainer(DbInfo *DBInfo) (func(context.Context, ...testconta
 	if err != nil {
 		return dbContainer.Terminate, err
 	}
+
 	DbInfo.Db_PORT = dbPort.Port()
 
 	return dbContainer.Terminate, err

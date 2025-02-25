@@ -121,6 +121,7 @@ func TestHandlers(t *testing.T) {
 			default:
 				t.Fatalf("unknown necessaryBody type: %T", body)
 			}
+
 			if err := json.NewDecoder(tt.rec.Body).Decode(actualBody); err != nil {
 				t.Fatalf("failed to bind response body: %v", err)
 				return

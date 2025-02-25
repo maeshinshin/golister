@@ -55,6 +55,7 @@ func New() Service {
 		// another initialization error.
 		log.Fatal(err)
 	}
+
 	db.SetConnMaxLifetime(0)
 	db.SetMaxIdleConns(50)
 	db.SetMaxOpenConns(50)
